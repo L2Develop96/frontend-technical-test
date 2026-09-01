@@ -17,12 +17,12 @@
       "lastMessageTimestamp": 1620284667
     },
     {
-      "id": 3,
-      "recipientId": 1,
-      "recipientNickname": "Thibaut",
-      "senderId": 4,
-      "senderNickname": "Elodie",
-      "lastMessageTimestamp": 1625648667
+      "senderId": 1,
+      "senderNickname": "Thibaut",
+      "recipientId": 4,
+      "recipientNickname": "Elodie",
+      "lastMessageTimestamp": 1788306221,
+      "id": 3
     }
   ],
   "messages": [

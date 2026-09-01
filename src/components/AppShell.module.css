@@ -1,0 +1,37 @@
+.shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 100%;
+}
+
+.pane {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+.list {
+  border-right: 1px solid var(--color-border);
+}
+
+.shell[data-variant='list'] .detail,
+.shell[data-variant='detail'] .list {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .shell {
+    grid-template-columns: minmax(18rem, 22rem) 1fr;
+    max-width: 84rem;
+    width: 100%;
+    margin: 0 auto;
+    border-inline: 1px solid var(--color-border);
+  }
+
+  .shell[data-variant='list'] .detail,
+  .shell[data-variant='detail'] .list {
+    display: flex;
+  }
+}

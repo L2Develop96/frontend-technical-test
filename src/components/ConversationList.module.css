@@ -1,0 +1,76 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoFrame {
+  width: 3.5rem;
+  height: auto;
+  overflow: hidden;
+  flex: none;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.newButton {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-orange);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.newButton:hover {
+  background: var(--color-orange-dark);
+}
+
+.scroller {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.status {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}

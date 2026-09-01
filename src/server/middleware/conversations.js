@@ -1,18 +1,58 @@
-const path = require('path')
-const db = require(`${path.dirname(__filename)}/../db.json`)
+const isConversationsCollection = (url) => /^\/conversations(\?|$)/.test(url);
 
-// Need this middleware to catch some requests
-// and return both conversations where userId is sender or recipient
-module.exports = (req, res, next) => {
-  if (/conversations/.test(req.url) && req.method === 'GET') {
-    const userId = req.query?.senderId
-    const result = db?.conversations?.filter(
-      conv => conv.senderId == userId || conv.recipientId == userId
-    )
+const listForUser = (req, res) => {
+  const userId = req.query.senderId;
+  const { conversations = [] } = req.app.db.getState();
 
-    res.status(200).json(result)
-    return
+  res.status(200).json(
+    conversations.filter(
+      (conv) =>
+        String(conv.senderId) === String(userId) ||
+        String(conv.recipientId) === String(userId),
+    ),
+  );
+};
+
+const removeConversation = (req, res) => {
+  const conversationId = req.query.id;
+  const db = req.app.db;
+  const { conversations = [] } = db.getState();
+
+  const target = conversations.find(
+    (conv) => String(conv.id) === String(conversationId),
+  );
+
+  if (!target) {
+    res.status(404).json({});
+    return;
   }
 
-  next()
-}
+  db.get('conversations')
+    .remove((conv) => String(conv.id) === String(conversationId))
+    .write();
+
+  db.get('messages')
+    .remove((message) => String(message.conversationId) === String(conversationId))
+    .write();
+
+  res.status(200).json(target);
+};
+
+module.exports = (req, res, next) => {
+  if (!isConversationsCollection(req.url)) {
+    next();
+    return;
+  }
+
+  if (req.method === 'GET' && req.query.senderId !== undefined) {
+    listForUser(req, res);
+    return;
+  }
+
+  if (req.method === 'DELETE' && req.query.id !== undefined) {
+    removeConversation(req, res);
+    return;
+  }
+
+  next();
+};

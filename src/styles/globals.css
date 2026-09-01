@@ -1,9 +1,27 @@
+:root {
+  --color-orange: #f4661b;
+  --color-orange-dark: #d9530c;
+  --color-navy: #16264a;
+  --color-text-muted: #6b7793;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f5f6f9;
+  --color-border: #e3e6ee;
+  --color-bubble-own: var(--color-orange);
+  --color-bubble-other: #eef0f5;
+  --color-danger: #c62828;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: var(--color-navy);
+  background: var(--color-surface-sunken);
 }
 
 a {
@@ -13,4 +31,11 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+html,
+body,
+#__next {
+  height: 100vh;
+  height: 100dvh;
 }
