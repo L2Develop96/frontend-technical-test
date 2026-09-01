@@ -71,6 +71,7 @@ If you are out of ideas, here are some thoughts :
 - We all love to relax after a hard day’s work. It would be a shame if we didn’t feel confident enough about the upcoming automatic deployment. Are you sure everything has been tested thoroughly ?
 
 ---
+
 ---
 
 # Solution
@@ -135,19 +136,19 @@ The layering is deliberate: **components never call `fetch`**, hooks never build
 
 ## Safety guards
 
-| Concern | Handling |
-|---|---|
-| Empty / oversized input | `validateMessageBody` — trimmed, rejected if empty, capped at 2000 chars; checked in the submit handler, not just via `disabled` |
-| Double submit | Disabled while pending **and** an early return in `onSubmit` |
-| XSS | React escapes by default; `react/no-danger` is an ESLint error so it stays that way |
-| Slow server | 8s timeout via `AbortController` |
-| Flaky server | Retry with exponential backoff on 5xx and network errors only — never on 4xx, never on mutations |
-| Navigating away mid-request | React Query's signal is composed into every request, so in-flight calls abort |
-| Offline | `useOnlineStatus` drives a banner and disables the composer |
-| Render crash | `ErrorBoundary` with a reset that also clears the query cache |
-| One pane failing | Errors are scoped per pane — a dead list doesn't kill the thread you're reading |
-| Failed send | Optimistic bubble rolls back, the text stays in the composer |
-| Malformed API data | Type guards drop bad rows from lists and throw a typed error for single resources |
+| Concern                     | Handling                                                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Empty / oversized input     | `validateMessageBody` — trimmed, rejected if empty, capped at 2000 chars; checked in the submit handler, not just via `disabled` |
+| Double submit               | Disabled while pending **and** an early return in `onSubmit`                                                                     |
+| XSS                         | React escapes by default; `react/no-danger` is an ESLint error so it stays that way                                              |
+| Slow server                 | 8s timeout via `AbortController`                                                                                                 |
+| Flaky server                | Retry with exponential backoff on 5xx and network errors only — never on 4xx, never on mutations                                 |
+| Navigating away mid-request | React Query's signal is composed into every request, so in-flight calls abort                                                    |
+| Offline                     | `useOnlineStatus` drives a banner and disables the composer                                                                      |
+| Render crash                | `ErrorBoundary` with a reset that also clears the query cache                                                                    |
+| One pane failing            | Errors are scoped per pane — a dead list doesn't kill the thread you're reading                                                  |
+| Failed send                 | Optimistic bubble rolls back, the text stays in the composer                                                                     |
+| Malformed API data          | Type guards drop bad rows from lists and throw a typed error for single resources                                                |
 
 **What could not be guarded client-side:** authentication is a hardcoded `getLoggedUserId() === 1`, so nothing stops a client requesting another user's conversations. Rate limiting, server-side sanitisation and CSP belong on a real backend. These are the guards that would matter most at scale, and the mock API cannot express them.
 
@@ -157,7 +158,7 @@ Both are in `src/server/middleware/conversations.js`. The fixes are minimal and 
 
 **1. The conversation list served stale data.** The middleware did `require('../db.json')` — a snapshot CommonJS caches once at startup. New conversations and updated `lastMessageTimestamp` values never appeared in the list, while `/conversation/:id` and `/messages/:id` bypassed the middleware and served live data, so list and detail disagreed. Bonus 1 would have looked broken. Fixed by reading `req.app.db.getState()`.
 
-**2. `DELETE /conversation/:id` could not work as documented.** `routes.json` rewrites that path to `/conversations?id=:id` for *all* HTTP methods, so the request reaches json-server as a collection query and 404s — the record survives. Since the rewrite can't be bypassed, the middleware now handles `DELETE` itself and removes the conversation's messages along with it (no endpoint could otherwise return or clean up orphaned messages).
+**2. `DELETE /conversation/:id` could not work as documented.** `routes.json` rewrites that path to `/conversations?id=:id` for _all_ HTTP methods, so the request reaches json-server as a collection query and 404s — the record survives. Since the rewrite can't be bypassed, the middleware now handles `DELETE` itself and removes the conversation's messages along with it (no endpoint could otherwise return or clean up orphaned messages).
 
 Both were verified with `curl` before any UI was written.
 
@@ -175,7 +176,7 @@ What was deliberately **not** done: virtualisation (three conversations — it w
 
 Automated tests were descoped for this pass; error paths were verified manually by stopping the API mid-session. The obsolete `App.spec.tsx` — which asserted against the placeholder homepage — was removed, and `npm test` still passes.
 
-Had tests been in scope, the order would have been: `guards.ts` (the unwrap-and-validate logic, pure and highest-risk), `useSendMessage` (optimistic insert and rollback), and `getOtherParticipant` (the classic bug in this exercise — conversation 3 has the logged-in user as *recipient*, so naively reading `recipientNickname` shows the user their own name).
+Had tests been in scope, the order would have been: `guards.ts` (the unwrap-and-validate logic, pure and highest-risk), `useSendMessage` (optimistic insert and rollback), and `getOtherParticipant` (the classic bug in this exercise — conversation 3 has the logged-in user as _recipient_, so naively reading `recipientNickname` shows the user their own name).
 
 ## Deviations and notes
 
@@ -187,3 +188,9 @@ Had tests been in scope, the order would have been: `guards.ts` (the unwrap-and-
 ## With more time
 
 Real authentication, message pagination, an integration test suite, and a websocket or polling layer so new messages arrive without a refetch.
+
+## Time spent
+
+![Git reflog showing the clone and both branches' commit timestamps](./docs/images/git-reflog-timeline.png)
+
+Per `git reflog`: roughly **2h20m** across both solutions.
