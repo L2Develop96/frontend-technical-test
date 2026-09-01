@@ -1,0 +1,67 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      var(--color-orange-soft) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #fdf7f3 100%);
+  /* Held back briefly so a fast response never produces a flash of splash. */
+  opacity: 0;
+  animation: reveal var(--transition-base) ease 300ms forwards;
+}
+
+.screen[data-leaving='true'] {
+  animation: fade var(--transition-base) ease forwards;
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.logo {
+  width: min(16rem, 70vw);
+  height: auto;
+  object-fit: contain;
+}
+
+.bar {
+  width: min(14rem, 60vw);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,21 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.loading {
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-4);
+}
+
+.deleteError {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  text-align: center;
+}

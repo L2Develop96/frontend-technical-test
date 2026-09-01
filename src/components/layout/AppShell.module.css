@@ -1,0 +1,83 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-surface-sunken);
+}
+
+.shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+.pane {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+.list {
+  border-right: 1px solid var(--color-border);
+}
+
+/* One pane at a time below the breakpoint: the route decides which. */
+.root[data-variant='list'] .detail,
+.root[data-variant='detail'] .list {
+  display: none;
+}
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 60;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-navy);
+  color: var(--color-text-inverse);
+  border-radius: 0 0 var(--radius-md) 0;
+  font-size: var(--text-sm);
+}
+
+.skipLink:focus {
+  left: 0;
+}
+
+.deleteError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+}
+
+.dismiss {
+  border: none;
+  background: none;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (min-width: 60rem) {
+  .shell {
+    grid-template-columns: minmax(18rem, var(--sidebar-width)) 1fr;
+    max-width: 84rem;
+    width: 100%;
+    margin: 0 auto;
+    border-inline: 1px solid var(--color-border);
+  }
+
+  .root[data-variant='list'] .detail,
+  .root[data-variant='detail'] .list {
+    display: flex;
+  }
+}
