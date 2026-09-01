@@ -71,6 +71,7 @@ If you are out of ideas, here are some thoughts :
 - We all love to relax after a hard day’s work. It would be a shame if we didn’t feel confident enough about the upcoming automatic deployment. Are you sure everything has been tested thoroughly ?
 
 ---
+
 ---
 
 # Solution
@@ -81,17 +82,17 @@ If you are out of ideas, here are some thoughts :
 
 This is a second solution to the same exercise, built on a separate branch (`approach/minimal-scope`) as a deliberate contrast to a more heavily engineered first pass. Same product, same features, a much lighter architecture underneath.
 
-| | This branch | The other solution |
-|---|---|---|
-| Server state | TanStack Query | TanStack Query |
-| Transport | axios, called directly | Custom `fetch` wrapper |
-| API layer | `api/services.ts` + `api/queries.ts` | A client + runtime guards + endpoints, across several files |
-| Runtime validation | None — the API's response is trusted | Every response checked against a type guard |
-| Error handling | axios defaults, `isLoading` / `isError` from React Query | Typed errors, retry with backoff, timeouts, request cancellation |
-| Mutations | Call the API, then `invalidateQueries` | Optimistic insert with rollback on failure |
-| Resilience UI | Plain loading/error text | Per-pane error states, an error boundary, an offline banner |
-| Styling | CSS Modules, a handful of tokens | A full design-token system, skeleton loaders, a splash screen |
-| Source files | ~21 | ~45 |
+|                    | This branch                                              | The other solution                                               |
+| ------------------ | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| Server state       | TanStack Query                                           | TanStack Query                                                   |
+| Transport          | axios, called directly                                   | Custom `fetch` wrapper                                           |
+| API layer          | `api/services.ts` + `api/queries.ts`                     | A client + runtime guards + endpoints, across several files      |
+| Runtime validation | None — the API's response is trusted                     | Every response checked against a type guard                      |
+| Error handling     | axios defaults, `isLoading` / `isError` from React Query | Typed errors, retry with backoff, timeouts, request cancellation |
+| Mutations          | Call the API, then `invalidateQueries`                   | Optimistic insert with rollback on failure                       |
+| Resilience UI      | Plain loading/error text                                 | Per-pane error states, an error boundary, an offline banner      |
+| Styling            | CSS Modules, a handful of tokens                         | A full design-token system, skeleton loaders, a splash screen    |
+| Source files       | ~21                                                      | ~45                                                              |
 
 ## Running it
 
@@ -173,3 +174,9 @@ No automated tests were added; behaviour was verified manually (send, create, de
 ## When each approach is the right call
 
 The heavier branch is the better default for anything that will run against a real backend, at real scale, for real users — which is what the exercise's own brief asks for ("this application can be used by millions of users"). This branch is what the same product looks like when the backend is trusted, the team is small, and shipping speed matters more than defending against failure modes that a fixed local mock cannot produce.
+
+## Time spent
+
+![Git reflog showing the clone and both branches' commit timestamps](./docs/images/git-reflog-timeline.png)
+
+Per `git reflog`: roughly **2h20m** across both solutions.
