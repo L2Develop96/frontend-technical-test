@@ -1,3 +1,13 @@
+# ⚠️ IMPORTANT NOTE
+
+> **Please read this before reviewing the implementation.**
+>
+> I’ve created two branches: `approach/minimal-scope` and `approach/full-scope`. They follow the same approach, with the full-scope version going a bit further.
+>
+> **AI usage transparency:** I used an AI assistant to speed up the delivery, while reviewing and adapting the implementation myself.
+>
+> **All details are documented in the README of each branch**, including time spent, AI usage, solutions, bug fixes, decisions, and the step-by-step process.
+
 # Context :
 
 At leboncoin, our users can share messages about a transaction, or ask for informations about any products.
